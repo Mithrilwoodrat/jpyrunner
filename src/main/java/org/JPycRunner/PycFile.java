@@ -84,7 +84,7 @@ public class PycFile {
         try {
             magic = toHex(loadNbytes(4));
             System.out.println(magic);
-            long epoch_time = toLong(loadNbytes(4));
+            long epoch_time = toInt(loadNbytes(4));
             System.out.println(epoch_time);
             Date date = new Date(epoch_time*1000);
             DateFormat formatter = new SimpleDateFormat("yyyy-M-dd HH:mm:ss");
@@ -94,6 +94,8 @@ public class PycFile {
             if (type != TYPE_CODE) {
                 System.out.println("Not CodeObject!");
             }
+            long co_argcount = toInt(loadNbytes(4));
+            System.out.printf("co_argcount: %d\n", co_argcount);
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -127,8 +129,8 @@ public class PycFile {
 
     }
 
-    private Long toLong(byte[] bytes) {
-        long result = (((bytes[0] & 0xff) |
+    private int toInt(byte[] bytes) {
+        int result = (((bytes[0] & 0xff) |
                 ((bytes[1] & 0xff) << 8) |
                 ((bytes[2] & 0xff) << 16) |
                 ((bytes[3] & 0xff) << 24)));
