@@ -1,5 +1,7 @@
 package org.JPycRunner;
 
+import org.JPycRunner.objects.PyObject;
+
 import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -79,7 +81,25 @@ public class PycFile {
         this.content = content;
         length = content.length;
     }
-
+//    https://github.com/python/cpython/blob/2.7/Python/marshal.c w_object 543
+//    else if (PyCode_Check(v)) {
+//        PyCodeObject *co = (PyCodeObject *)v;
+//        w_byte(TYPE_CODE, p);
+//        w_long(co->co_argcount, p);
+//        w_long(co->co_nlocals, p);
+//        w_long(co->co_stacksize, p);
+//        w_long(co->co_flags, p);
+//        w_object(co->co_code, p);
+//        w_object(co->co_consts, p);
+//        w_object(co->co_names, p);
+//        w_object(co->co_varnames, p);
+//        w_object(co->co_freevars, p);
+//        w_object(co->co_cellvars, p);
+//        w_object(co->co_filename, p);
+//        w_object(co->co_name, p);
+//        w_long(co->co_firstlineno, p);
+//        w_object(co->co_lnotab, p);
+//    }
     public void parse() {
         try {
             magic = toHex(loadNbytes(4));
@@ -91,20 +111,54 @@ public class PycFile {
             String dateFormatted = formatter.format(date);
             System.out.println(dateFormatted);
             byte type = getType();
+
             if (type != TYPE_CODE) {
-                System.out.println("Not CodeObject!");
+                System.out.println("Invalid CodeObject!");
             }
-            long co_argcount = toInt(loadNbytes(4));
+
+            int co_argcount = getInt();
             System.out.printf("co_argcount: %d\n", co_argcount);
+
+            //int co_kwonlyargcount = getInt();
+            //System.out.printf("co_kwonlyargcount: %d\n", co_kwonlyargcount);
+
+            int co_nlocals = getInt();
+            System.out.printf("co_nlocals: %d\n", co_nlocals);
+            int co_stacksize = getInt();
+            System.out.printf("co_stacksize: %d\n", co_stacksize);
+            int co_flags = getInt();
+            System.out.printf("co_flags: %d\n", co_flags);
+
+            //int co_firstlineno = getInt();
+            //System.out.printf("co_firstlineno: %d\n", co_firstlineno);
+            type = getType();
+
+            if (type != TYPE_STRING) {
+                System.out.println("Invalid CodeObject!");
+            }
+
+            String co_code = getString();
+
+            type = getType();
+
+            if (type != TYPE_TUPLE) {
+                System.out.println("Invalid CodeObject!");
+            }
+
+            String[] co_consts = getStringTuple();
+
         } catch (Exception e){
             e.printStackTrace();
         }
     }
 
     private byte[] loadNbytes(int n) {
-        byte[] result = new byte[0];
+        byte[] result = new byte[n];
         if ((cursor + n) < length) {
-            result =  Arrays.copyOfRange(content, cursor, cursor + n);
+            for (int i=0;i<n;i+=1) {
+                result[i] = content[cursor+i];
+            }
+            //result =  Arrays.copyOfRange(content, cursor, cursor + n);
             cursor = cursor + n;
         }
         return result;
@@ -137,9 +191,66 @@ public class PycFile {
         return result;
     }
 
+    private int getInt() {
+        return toInt(loadNbytes(4));
+    }
+
     private byte getType() {
         byte type =  loadNbytes(1)[0];
         System.out.printf("type: %c\n", type);
         return type;
+    }
+
+//    static void
+//    w_pstring(const char *s, Py_ssize_t n, WFILE *p)
+//    {
+//        W_SIZE(n, p);
+//        w_string(s, n, p);
+//    }
+
+//    static void
+//    w_string(const char *s, Py_ssize_t n, WFILE *p)
+//    {
+//        if (p->fp != NULL) {
+//            fwrite(s, 1, n, p->fp);
+//        }
+//        else {
+//            while (--n >= 0) {
+//                w_byte(*s, p);
+//                s++;
+//            }
+//        }
+//    }
+    private  String getString() {
+        int length = getInt();
+        return new String(loadNbytes(length));
+    }
+
+    //    https://github.com/python/cpython/blob/2.7/Python/marshal.c w_object 569
+    //    else if (PyTuple_CheckExact(v)) {
+    //        w_byte(TYPE_TUPLE, p);
+    //        n = PyTuple_Size(v);
+    //        W_SIZE(n, p);
+    //        for (i = 0; i < n; i++) {
+    //            w_object(PyTuple_GET_ITEM(v, i), p);
+    //        }
+    //    }
+
+    private String[] getStringTuple() {
+        int length = getInt();
+        System.out.printf("Tuple Length: %d\n", length);
+        String[] result = new String[length];
+        System.out.printf("Strings: ");
+        for (int i=0; i < length; i++) {
+            byte type = getType();
+            // TODO implements PyObject getObject() method
+            if (type == TYPE_STRING) {
+                result[i] = getString();
+                System.out.printf("%s\t", result[i]);
+            }
+
+        }
+        System.out.printf("\n");
+        return result;
     }
 }

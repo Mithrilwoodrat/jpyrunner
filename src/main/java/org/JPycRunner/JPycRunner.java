@@ -14,7 +14,6 @@ public class JPycRunner {
         }
     }
     private static void LoadPycFile(String filename) throws IOException {
-
         File f = new File(filename);
         long length = f.length();
         System.out.printf("File Length: %d\n", length);
