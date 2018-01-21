@@ -147,6 +147,20 @@ public class PycFile {
 
             String[] co_consts = getStringTuple();
 
+            type = getType();
+
+            if (type != TYPE_TUPLE) {
+                System.out.println("Invalid CodeObject!");
+            }
+            String[] co_names = getStringTuple();
+
+            type = getType();
+
+            if (type != TYPE_TUPLE) {
+                System.out.println("Invalid CodeObject!");
+            }
+            String[] co_cellvars = getStringTuple();
+
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -226,7 +240,7 @@ public class PycFile {
         return new String(loadNbytes(length));
     }
 
-    //    https://github.com/python/cpython/blob/2.7/Python/marshal.c w_object 569
+    //    https://github.com/python/cpython/blob/2.7/Python/marshal.c w_object 369
     //    else if (PyTuple_CheckExact(v)) {
     //        w_byte(TYPE_TUPLE, p);
     //        n = PyTuple_Size(v);
@@ -246,9 +260,14 @@ public class PycFile {
             // TODO implements PyObject getObject() method
             if (type == TYPE_STRING) {
                 result[i] = getString();
-                System.out.printf("%s\t", result[i]);
+                System.out.printf("%s\n", result[i]);
+            } else if (type == TYPE_INTERNED) {
+                result[i] = getString();
+                System.out.printf("%s\n", result[i]);
             }
-
+            else if (type == TYPE_NONE) {
+                continue;
+            }
         }
         System.out.printf("\n");
         return result;
