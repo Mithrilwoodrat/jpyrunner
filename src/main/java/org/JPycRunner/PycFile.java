@@ -138,6 +138,7 @@ public class PycFile {
             }
 
             String co_code = getString();
+            System.out.printf("co_code: %s\n", co_code);
 
             type = getType();
 
@@ -159,7 +160,32 @@ public class PycFile {
             if (type != TYPE_TUPLE) {
                 System.out.println("Invalid CodeObject!");
             }
+            String[] co_varsnames = getStringTuple();
+
+            type = getType();
+
+            if (type != TYPE_TUPLE) {
+                System.out.println("Invalid CodeObject!");
+            }
+            String[] co_freevars = getStringTuple();
+
+            type = getType();
+
+            if (type != TYPE_TUPLE) {
+                System.out.println("Invalid CodeObject!");
+            }
             String[] co_cellvars = getStringTuple();
+
+            type = getType();
+
+            if (type != TYPE_STRING) {
+                System.out.println("Invalid CodeObject!");
+            }
+
+            String co_filename = getString();
+
+            type = getType();
+            String co_name = getString();
 
         } catch (Exception e){
             e.printStackTrace();
