@@ -39,12 +39,14 @@ package org.JPycRunner.objects;
 //        } PyCodeObject;
 
 public class PyCodeObject extends  PyObject{
+    private static boolean debug = true;
+
+
     public int co_argcount;
-    public int co_kwonlyargcount;
+    // public int co_kwonlyargcount;
     public int co_nlocals;
     public int co_stacksize;
     public int co_flags;
-    public int co_firstlineno = -1;
 
     public byte[] co_code;
 
@@ -54,30 +56,30 @@ public class PyCodeObject extends  PyObject{
     public String co_freevars[];
     public String co_cellvars[];
 
-    public long co_cell2arg;
+    // public long co_cell2arg;
     public String co_filename;
     public String co_name;
-    public int co_lnotab;
+    public int co_firstlineno = -1;
+    public String co_lnotab;
 
-    public PyCodeObject(int co_argcount, int co_kwonlyargcount, int co_nlocals, int co_stacksize, int co_flags,
-                        int co_firstlineno, byte[] co_code, String[] co_consts, String[] co_names, String[] co_varnames,
-                        String[] co_freevars, String[] co_cellvars, long co_cell2arg,
-                        String co_filename, String co_name, int co_lnotab) {
+    public PyCodeObject(int co_argcount, int co_nlocals, int co_stacksize,
+                        int co_flags, byte[] co_code, String[] co_consts,
+                        String[] co_names, String[] co_varnames, String[] co_freevars,
+                        String[] co_cellvars, String co_filename, String co_name,
+                        int co_firstlineno, String co_lnotab) {
         this.co_argcount = co_argcount;
-        this.co_kwonlyargcount = co_kwonlyargcount;
         this.co_nlocals = co_nlocals;
         this.co_stacksize = co_stacksize;
         this.co_flags = co_flags;
-        this.co_firstlineno = co_firstlineno;
         this.co_code = co_code;
         this.co_consts = co_consts;
         this.co_names = co_names;
         this.co_varnames = co_varnames;
         this.co_freevars = co_freevars;
         this.co_cellvars = co_cellvars;
-        this.co_cell2arg = co_cell2arg;
         this.co_filename = co_filename;
         this.co_name = co_name;
+        this.co_firstlineno = co_firstlineno;
         this.co_lnotab = co_lnotab;
     }
 }

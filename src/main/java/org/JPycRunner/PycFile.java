@@ -1,5 +1,6 @@
 package org.JPycRunner;
 
+import org.JPycRunner.objects.PyCodeObject;
 import org.JPycRunner.objects.PyObject;
 
 import java.io.*;
@@ -136,9 +137,9 @@ public class PycFile {
             if (type != TYPE_STRING) {
                 System.out.println("Invalid CodeObject!");
             }
-
-            String co_code = getString();
-            System.out.printf("co_code: %s\n", co_code);
+            int length = getInt();
+            byte[] co_code = loadNbytes(length);
+            System.out.printf("co_code: %s\n", toHex(co_code));
 
             type = getType();
 
@@ -186,6 +187,21 @@ public class PycFile {
 
             type = getType();
             String co_name = getString();
+            System.out.printf("co_name: %s\n", co_name);
+
+            int co_firstlineno = getInt();
+            System.out.printf("co_firstlineno: %d\n", co_firstlineno);
+
+            type = getType();
+            String co_lnotab = getString();
+
+            System.out.printf("co_lnotab: %s\n", co_lnotab);
+
+            PyCodeObject code = new PyCodeObject(co_argcount, co_nlocals, co_stacksize,
+                    co_flags, co_code, co_consts,
+                    co_names, co_varsnames, co_freevars,
+                    co_cellvars, co_filename, co_name,
+                    co_firstlineno, co_lnotab);
 
         } catch (Exception e){
             e.printStackTrace();
