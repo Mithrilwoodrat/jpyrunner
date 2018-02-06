@@ -6,7 +6,6 @@ import org.JPycRunner.objects.PyObject;
 import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 
 // pyc file 2.7
@@ -101,7 +100,7 @@ public class PycFile {
 //        w_long(co->co_firstlineno, p);
 //        w_object(co->co_lnotab, p);
 //    }
-    public void parse() {
+    public PyCodeObject parse() {
         try {
             magic = toHex(loadNbytes(4));
             System.out.println(magic);
@@ -202,10 +201,12 @@ public class PycFile {
                     co_names, co_varsnames, co_freevars,
                     co_cellvars, co_filename, co_name,
                     co_firstlineno, co_lnotab);
+            return code;
 
         } catch (Exception e){
             e.printStackTrace();
         }
+        return null;
     }
 
     private byte[] loadNbytes(int n) {
