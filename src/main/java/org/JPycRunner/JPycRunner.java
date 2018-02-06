@@ -1,5 +1,7 @@
 package org.JPycRunner;
 
+import org.JPycRunner.objects.PyCodeObject;
+
 import java.io.*;
 
 public class JPycRunner {
@@ -25,7 +27,8 @@ public class JPycRunner {
             fileInputStream.read(content);
             fileInputStream.close();
             PycFile pyc = new PycFile(content);
-            pyc.parse();
+            PyCodeObject code = pyc.parse();
+            code.dis();
         } catch (Exception e) {
             e.printStackTrace();
         }

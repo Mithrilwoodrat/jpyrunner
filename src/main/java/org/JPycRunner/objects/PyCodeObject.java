@@ -1,5 +1,5 @@
 package org.JPycRunner.objects;
-
+import org.JPycRunner.objects.OpCode;
 /* Bytecode object */
 
 //typedef struct _object {
@@ -81,5 +81,35 @@ public class PyCodeObject extends  PyObject{
         this.co_name = co_name;
         this.co_firstlineno = co_firstlineno;
         this.co_lnotab = co_lnotab;
+    }
+
+    private static char getUnsigned(byte[] x, int i) {
+        byte b = x[i];
+        if (b < 0) {
+            return (char) (b + 256);
+        } else {
+            return (char) b;
+        }
+    }
+
+    //ref: PyByteCode interpret
+    public void call() {
+        int opcode;    /* Current opcode */
+        int oparg = 0; /* Current opcode argument, if any */
+    }
+
+    public void dis() {
+        int next_instr = 0;
+        int opcode;    /* Current opcode */
+        int oparg = 0; /* Current opcode argument, if any */
+        for (; ; ) {
+            opcode = getUnsigned(co_code, next_instr);
+            if (OpCode.has_args(opcode)) {
+                next_instr += 2;
+                oparg = (getUnsigned(co_code, next_instr) << 8) + getUnsigned(co_code, next_instr - 1);
+            }
+            next_instr += 1;
+            System.out.printf("opcode:%d , oparg: %d\n", opcode, oparg);
+        }
     }
 }
