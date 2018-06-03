@@ -165,6 +165,9 @@ package org.JPycRunner.objects;
 
 // ref : https://sourcegraph.com/github.com/jboss-javassist/javassist/-/blob/src/main/javassist/bytecode/Opcode.java?utm_source=share#L3:32
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class OpCode {
     public static final int ROT_TWO = 2;
     public static final int ROT_THREE = 3;
@@ -286,9 +289,139 @@ public class OpCode {
     public static final int MAP_ADD = 147;
 
     public static boolean has_args(int op) {
-        return (op > HAVE_ARGUMENT);
+        return (op >= HAVE_ARGUMENT);
     }
 
+    public static String GetCode(int opcode) {
+        return  CodeMap.get(opcode);
+    }
+
+    private static final HashMap<Integer, String> CodeMap = CreateCodeMap();
+    private static HashMap<Integer, String> CreateCodeMap()
+    {
+        HashMap<Integer, String> codemap = new HashMap<Integer, String>();
+        codemap.put(0,"STOP_CODE");
+        codemap.put(1,"POP_TOP");
+        codemap.put(2,"ROT_TWO");
+        codemap.put(3,"ROT_THREE");
+        codemap.put(4,"DUP_TOP");
+        codemap.put(5,"ROT_FOUR");
+        codemap.put(9,"NOP");
+        codemap.put(10,"UNARY_POSITIVE");
+        codemap.put(11,"UNARY_NEGATIVE");
+        codemap.put(12,"UNARY_NOT");
+        codemap.put(13,"UNARY_CONVERT");
+        codemap.put(15,"UNARY_INVERT");
+        codemap.put(19,"BINARY_POWER");
+        codemap.put(20,"BINARY_MULTIPLY");
+        codemap.put(21,"BINARY_DIVIDE");
+        codemap.put(22,"BINARY_MODULO");
+        codemap.put(23,"BINARY_ADD");
+        codemap.put(24,"BINARY_SUBTRACT");
+        codemap.put(25,"BINARY_SUBSCR");
+        codemap.put(26,"BINARY_FLOOR_DIVIDE");
+        codemap.put(27,"BINARY_TRUE_DIVIDE");
+        codemap.put(28,"INPLACE_FLOOR_DIVIDE");
+        codemap.put(29,"INPLACE_TRUE_DIVIDE");
+        codemap.put(30,"SLICE");
+        codemap.put(31,"SLICE_1");
+        codemap.put(32,"SLICE_2");
+        codemap.put(33,"SLICE_3");
+        codemap.put(40,"STORE_SLICE");
+        codemap.put(41,"STORE_SLICE_1");
+        codemap.put(42,"STORE_SLICE_2");
+        codemap.put(43,"STORE_SLICE_3");
+        codemap.put(50,"DELETE_SLICE");
+        codemap.put(51,"DELETE_SLICE_1");
+        codemap.put(52,"DELETE_SLICE_2");
+        codemap.put(53,"DELETE_SLICE_3");
+        codemap.put(54,"STORE_MAP");
+        codemap.put(55,"INPLACE_ADD");
+        codemap.put(56,"INPLACE_SUBTRACT");
+        codemap.put(57,"INPLACE_MULTIPLY");
+        codemap.put(58,"INPLACE_DIVIDE");
+        codemap.put(59,"INPLACE_MODULO");
+        codemap.put(60,"STORE_SUBSCR");
+        codemap.put(61,"DELETE_SUBSCR");
+        codemap.put(62,"BINARY_LSHIFT");
+        codemap.put(63,"BINARY_RSHIFT");
+        codemap.put(64,"BINARY_AND");
+        codemap.put(65,"BINARY_XOR");
+        codemap.put(66,"BINARY_OR");
+        codemap.put(67,"INPLACE_POWER");
+        codemap.put(68,"GET_ITER");
+        codemap.put(70,"PRINT_EXPR");
+        codemap.put(71,"PRINT_ITEM");
+        codemap.put(72,"PRINT_NEWLINE");
+        codemap.put(73,"PRINT_ITEM_TO");
+        codemap.put(74,"PRINT_NEWLINE_TO");
+        codemap.put(75,"INPLACE_LSHIFT");
+        codemap.put(76,"INPLACE_RSHIFT");
+        codemap.put(77,"INPLACE_AND");
+        codemap.put(78,"INPLACE_XOR");
+        codemap.put(79,"INPLACE_OR");
+        codemap.put(80,"BREAK_LOOP");
+        codemap.put(81,"WITH_CLEANUP");
+        codemap.put(82,"LOAD_LOCALS");
+        codemap.put(83,"RETURN_VALUE");
+        codemap.put(84,"IMPORT_STAR");
+        codemap.put(85,"EXEC_STMT");
+        codemap.put(86,"YIELD_VALUE");
+        codemap.put(87,"POP_BLOCK");
+        codemap.put(88,"END_FINALLY");
+        codemap.put(89,"BUILD_CLASS");
+        codemap.put(90,"HAVE_ARGUMENT");
+        codemap.put(90,"STORE_NAME");
+        codemap.put(91,"DELETE_NAME");
+        codemap.put(92,"UNPACK_SEQUENCE");
+        codemap.put(93,"FOR_ITER");
+        codemap.put(94,"LIST_APPEND");
+        codemap.put(95,"STORE_ATTR");
+        codemap.put(96,"DELETE_ATTR");
+        codemap.put(97,"STORE_GLOBAL");
+        codemap.put(98,"DELETE_GLOBAL");
+        codemap.put(99,"DUP_TOPX");
+        codemap.put(100,"LOAD_CONST");
+        codemap.put(101,"LOAD_NAME");
+        codemap.put(102,"BUILD_TUPLE");
+        codemap.put(103,"BUILD_LIST");
+        codemap.put(104,"BUILD_SET");
+        codemap.put(105,"BUILD_MAP");
+        codemap.put(106,"LOAD_ATTR");
+        codemap.put(107,"COMPARE_OP");
+        codemap.put(108,"IMPORT_NAME");
+        codemap.put(109,"IMPORT_FROM");
+        codemap.put(110,"JUMP_FORWARD");
+        codemap.put(111,"JUMP_IF_FALSE_OR_POP");
+        codemap.put(112,"JUMP_IF_TRUE_OR_POP");
+        codemap.put(113,"JUMP_ABSOLUTE");
+        codemap.put(114,"POP_JUMP_IF_FALSE");
+        codemap.put(115,"POP_JUMP_IF_TRUE");
+        codemap.put(116,"LOAD_GLOBAL");
+        codemap.put(119,"CONTINUE_LOOP");
+        codemap.put(120,"SETUP_LOOP");
+        codemap.put(121,"SETUP_EXCEPT");
+        codemap.put(122,"SETUP_FINALLY");
+        codemap.put(124,"LOAD_FAST");
+        codemap.put(125,"STORE_FAST");
+        codemap.put(126,"DELETE_FAST");
+        codemap.put(130,"RAISE_VARARGS");
+        codemap.put(131,"CALL_FUNCTION");
+        codemap.put(132,"MAKE_FUNCTION");
+        codemap.put(133,"BUILD_SLICE");
+        codemap.put(134,"MAKE_CLOSURE");
+        codemap.put(135,"LOAD_CLOSURE");
+        codemap.put(136,"LOAD_DEREF");
+        codemap.put(137,"STORE_DEREF");
+        codemap.put(140,"CALL_FUNCTION_VAR");
+        codemap.put(141,"CALL_FUNCTION_KW");
+        codemap.put(142,"CALL_FUNCTION_VAR_KW");
+        codemap.put(143,"SETUP_WITH");
+        codemap.put(145,"EXTENDED_ARG");
+        codemap.put(146,"SET_ADD");
+        codemap.put(147,"MAP_ADD");
+        return codemap;
+    }
     // from jython/src/org/python/core/OpCode.java
     public static final int PyCmp_LT        =  0;
     public static final int PyCmp_LE        =  1;

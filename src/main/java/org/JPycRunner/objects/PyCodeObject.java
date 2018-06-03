@@ -1,4 +1,5 @@
 package org.JPycRunner.objects;
+import jdk.nashorn.internal.runtime.regexp.joni.constants.OPCode;
 import org.JPycRunner.objects.OpCode;
 /* Bytecode object */
 
@@ -92,6 +93,17 @@ public class PyCodeObject extends  PyObject{
         }
     }
 
+    private  String GetOparg(int opcode, int oparg) {
+        if (opcode == OpCode.LOAD_CONST)
+        {
+            return co_consts[oparg];
+        }
+        else if (opcode == OpCode.LOAD_NAME || opcode == OpCode.STORE_NAME) {
+            return co_names[oparg];
+        }
+        return null;
+    }
+
     //ref: PyByteCode interpret
     public void call() {
         int opcode;    /* Current opcode */
@@ -102,14 +114,17 @@ public class PyCodeObject extends  PyObject{
         int next_instr = 0;
         int opcode;    /* Current opcode */
         int oparg = 0; /* Current opcode argument, if any */
-        for (; ; ) {
+        for (;next_instr < co_code.length ; ) {
             opcode = getUnsigned(co_code, next_instr);
             if (OpCode.has_args(opcode)) {
                 next_instr += 2;
                 oparg = (getUnsigned(co_code, next_instr) << 8) + getUnsigned(co_code, next_instr - 1);
+                System.out.printf("opcode:%s , oparg: %d (%s)\n", OpCode.GetCode(opcode), oparg, GetOparg(opcode, oparg));
+            }
+            else{
+                System.out.printf("opcode:%s\n", OpCode.GetCode(opcode));
             }
             next_instr += 1;
-            System.out.printf("opcode:%d , oparg: %d\n", opcode, oparg);
         }
     }
 }
