@@ -1,5 +1,4 @@
 package org.JPycRunner.objects;
-import jdk.nashorn.internal.runtime.regexp.joni.constants.OPCode;
 import org.JPycRunner.objects.OpCode;
 /* Bytecode object */
 
